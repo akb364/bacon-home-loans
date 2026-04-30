@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Disclaimer from "../components/Disclaimer";
+import Headshot from "../components/Headshot";
 import Layout from "../components/Layout";
 import Seo from "../components/Seo";
 import { Section, SectionHeader } from "../components/Section";
@@ -74,6 +75,15 @@ export default function Home() {
           <p className="mt-4 text-sm font-bold uppercase tracking-[0.16em] text-desert-100">
             NMLS ID: 2728600 | Powered by Artemis Mortgage
           </p>
+          <div className="mt-8 flex max-w-xl items-center gap-4 rounded-md border border-white/20 bg-white/10 p-4 backdrop-blur">
+            <Headshot className="h-20 w-20 shrink-0" />
+            <div>
+              <p className="text-base font-black">Austin Bacon</p>
+              <p className="mt-1 text-sm leading-6 text-slate-100">
+                Arizona mortgage loan officer, NMLS ID: 2728600, powered by Artemis Mortgage.
+              </p>
+            </div>
+          </div>
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
               href="/contact"

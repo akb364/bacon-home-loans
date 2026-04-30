@@ -11,6 +11,17 @@ npm install
 npm run dev
 ```
 
+## Headshot
+
+Add Austin's headshot here:
+
+```text
+public/austin-bacon-headshot.jpg
+```
+
+Use a square or portrait-oriented JPG if possible. The site includes an initials fallback until the
+image is added.
+
 ## GitHub Pages
 
 The project is configured to deploy from GitHub Actions. After merging a feature branch into `main`, enable GitHub Pages in the repository settings and choose **GitHub Actions** as the source.
