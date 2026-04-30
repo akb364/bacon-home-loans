@@ -16,7 +16,7 @@ npm run dev
 Add Austin's headshot here:
 
 ```text
-public/austin-bacon-headshot.jpg
+public/austin-bacon-headshot.JPG
 ```
 
 Use a square or portrait-oriented JPG if possible. The site includes an initials fallback until the
