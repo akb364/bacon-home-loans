@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Disclaimer from "../components/Disclaimer";
+import Headshot from "../components/Headshot";
 import Layout from "../components/Layout";
 import Seo from "../components/Seo";
 import { Section, SectionHeader } from "../components/Section";
@@ -180,6 +181,17 @@ export default function Contact() {
               title="See what you may qualify for."
               description={`Share the basics with ${siteConfig.officerName}, NMLS ID: ${siteConfig.nmlsId}, so the next conversation can focus on loan options, payment comfort, and Arizona program fit. This demo form is not connected to a backend yet.`}
             />
+            <div className="mt-8 flex items-center gap-4 rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+              <Headshot className="h-24 w-24 shrink-0" />
+              <div>
+                <p className="text-lg font-black text-ink">{siteConfig.officerName}</p>
+                <p className="mt-1 text-sm leading-6 text-slate-600">
+                  Arizona mortgage loan officer
+                  <br />
+                  NMLS ID: {siteConfig.nmlsId}
+                </p>
+              </div>
+            </div>
             <div className="mt-8 rounded-md border border-slate-200 bg-slate-50 p-6">
               <p className="text-sm font-bold uppercase tracking-[0.16em] text-slate-500">
                 Direct
