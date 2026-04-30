@@ -44,14 +44,20 @@ A      @     185.199.108.153
 A      @     185.199.109.153
 A      @     185.199.110.153
 A      @     185.199.111.153
+AAAA   @     2606:50c0:8000::153
+AAAA   @     2606:50c0:8001::153
+AAAA   @     2606:50c0:8002::153
+AAAA   @     2606:50c0:8003::153
 ```
 
-Optional but recommended for `www.baconhomeloans.com`:
+Add this record for `www.baconhomeloans.com`:
 
 ```text
 Type   Name  Value
-CNAME  www   YOUR-GITHUB-USERNAME.github.io
+CNAME  www   akb364.github.io
 ```
+
+Remove any conflicting `A`, `AAAA`, `CNAME`, `ALIAS`, `URL Redirect`, `Masked Redirect`, or parking records for `@` or `www`.
 
 After DNS is added, open the repository on GitHub and go to:
 
