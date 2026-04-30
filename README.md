@@ -26,13 +26,46 @@ image is added.
 
 The project is configured to deploy from GitHub Actions. After merging a feature branch into `main`, enable GitHub Pages in the repository settings and choose **GitHub Actions** as the source.
 
-The workflow automatically sets the base path for a project Pages URL such as:
+The production site is configured for:
 
 ```text
-https://YOUR-GITHUB-USERNAME.github.io/bacon-home-loans/
+https://baconhomeloans.com
 ```
 
-When the final domain is ready, update DNS and set `NEXT_PUBLIC_SITE_URL` / canonical settings to `https://www.baconhomeloans.com`.
+The custom domain is set by `public/CNAME`, which GitHub Pages uses during deployment.
+
+### Configure DNS
+
+In the DNS settings where `baconhomeloans.com` was purchased, add these records for the apex domain:
+
+```text
+Type   Name  Value
+A      @     185.199.108.153
+A      @     185.199.109.153
+A      @     185.199.110.153
+A      @     185.199.111.153
+```
+
+Optional but recommended for `www.baconhomeloans.com`:
+
+```text
+Type   Name  Value
+CNAME  www   YOUR-GITHUB-USERNAME.github.io
+```
+
+After DNS is added, open the repository on GitHub and go to:
+
+```text
+Settings -> Pages -> Custom domain
+```
+
+Enter:
+
+```text
+baconhomeloans.com
+```
+
+Then enable **Enforce HTTPS** once GitHub finishes checking DNS.
 
 ## Branch Workflow
 
