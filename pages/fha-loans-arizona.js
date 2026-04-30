@@ -31,6 +31,44 @@ const faqs = [
   }
 ];
 
+const creditBreakdown = [
+  {
+    range: "580+",
+    down: "As low as 3.5% down",
+    note: "This is the score range many buyers associate with FHA, but approval still depends on the full file."
+  },
+  {
+    range: "500-579",
+    down: "At least 10% down",
+    note: "Some lenders may set higher minimums than FHA's baseline, so this needs a lender-specific review."
+  },
+  {
+    range: "Below 500",
+    down: "Generally not FHA-insurable",
+    note: "A credit improvement plan may be the better first step before trying to buy."
+  }
+];
+
+const downPaymentExamples = [
+  { price: "$250,000", fhaDown: "$8,750", conventionalDown: "$7,500" },
+  { price: "$300,000", fhaDown: "$10,500", conventionalDown: "$9,000" },
+  { price: "$350,000", fhaDown: "$12,250", conventionalDown: "$10,500" }
+];
+
+const pros = [
+  "Flexible credit profile review compared with many conventional scenarios",
+  "Lower minimum down payment than many buyers expect",
+  "Can pair with eligible down payment assistance programs",
+  "May help buyers who are rebuilding credit or have limited savings"
+];
+
+const cons = [
+  "Mortgage insurance is part of the loan structure",
+  "Property must meet FHA appraisal and condition standards",
+  "Condo, manufactured home, and repair situations may need extra review",
+  "A conventional loan may be less expensive for stronger credit profiles"
+];
+
 export default function FhaLoansArizona() {
   return (
     <Layout>
@@ -81,6 +119,118 @@ export default function FhaLoansArizona() {
           </div>
         </Section>
       </section>
+      <Section>
+        <SectionHeader
+          eyebrow="Who It Is For"
+          title="FHA may fit buyers who need flexibility."
+          description="FHA is often worth reviewing when a buyer has limited savings, a shorter credit history, previous credit challenges, or wants to compare a lower down payment path against conventional financing."
+        />
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {[
+            "First-time buyers with limited savings",
+            "Buyers rebuilding credit after past challenges",
+            "Borrowers who want to compare FHA with assistance options"
+          ].map((item) => (
+            <div key={item} className="rounded-md border border-slate-200 bg-white p-6">
+              <p className="font-black leading-6 text-ink">{item}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <section className="bg-white">
+        <Section>
+          <SectionHeader
+            eyebrow="Credit Score Breakdown"
+            title="How credit score can affect FHA down payment."
+            description="These are FHA baseline concepts, but individual lenders may apply additional requirements. The full approval review includes income, debts, assets, property, and documentation."
+          />
+          <div className="mt-10 overflow-hidden rounded-md border border-slate-200 bg-white">
+            {creditBreakdown.map((item) => (
+              <div key={item.range} className="grid gap-3 border-b border-slate-200 p-5 last:border-b-0 md:grid-cols-[0.6fr_0.8fr_1.6fr]">
+                <p className="font-black text-ink">{item.range}</p>
+                <p className="font-bold text-saguaro-700">{item.down}</p>
+                <p className="text-sm leading-6 text-slate-600">{item.note}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      </section>
+
+      <Section>
+        <SectionHeader
+          eyebrow="Down Payment Examples"
+          title="What 3.5% down looks like in real numbers."
+          description="These examples show only the down payment. Closing costs, prepaid taxes, insurance, mortgage insurance, and assistance programs can change the actual cash needed."
+        />
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {downPaymentExamples.map((item) => (
+            <div key={item.price} className="rounded-md border border-slate-200 bg-white p-6">
+              <p className="text-sm font-bold uppercase tracking-[0.16em] text-slate-500">
+                Purchase Price
+              </p>
+              <p className="mt-2 text-3xl font-black text-ink">{item.price}</p>
+              <p className="mt-5 text-sm font-bold text-saguaro-700">FHA 3.5% down</p>
+              <p className="text-xl font-black text-ink">{item.fhaDown}</p>
+              <p className="mt-3 text-xs leading-5 text-slate-500">
+                For comparison, 3% conventional down would be {item.conventionalDown}.
+              </p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <section className="bg-white">
+        <Section>
+          <SectionHeader
+            eyebrow="Real Scenario"
+            title="Someone making $70k could potentially buy around $275,000."
+            description="This is an educational example, not an approval. The real number can move up or down based on debts, credit, rates, taxes, insurance, assistance, and underwriting."
+          />
+          <div className="mt-10 rounded-md border border-slate-200 bg-slate-50 p-6">
+            <p className="text-sm leading-7 text-slate-700">
+              Example assumptions: $70,000 annual income, no other monthly debt, FHA financing with
+              3.5% down, a sample 6.75% interest rate, estimated Arizona property taxes,
+              homeowners insurance, and FHA monthly mortgage insurance. Under those assumptions, a
+              purchase price near $275,000 could create an estimated housing payment around the
+              mid-30% range of gross monthly income. A higher debt load, HOA, taxes, insurance, or
+              rate could reduce that number.
+            </p>
+          </div>
+        </Section>
+      </section>
+
+      <Section>
+        <SectionHeader
+          eyebrow="Pros And Cons"
+          title="FHA is useful, but it is not automatically the best loan."
+          description="The right choice depends on the buyer's credit profile, monthly payment target, property type, and how long they expect to keep the loan."
+        />
+        <div className="mt-10 grid gap-5 lg:grid-cols-2">
+          <div className="rounded-md border border-slate-200 bg-white p-6">
+            <h3 className="text-xl font-black text-ink">Pros</h3>
+            <ul className="mt-5 space-y-3">
+              {pros.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-6 text-slate-700">
+                  <span className="mt-2 h-2 w-2 rounded-full bg-saguaro-700" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-md border border-slate-200 bg-white p-6">
+            <h3 className="text-xl font-black text-ink">Cons</h3>
+            <ul className="mt-5 space-y-3">
+              {cons.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-6 text-slate-700">
+                  <span className="mt-2 h-2 w-2 rounded-full bg-desert-500" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Section>
       <TrustSection />
       <Section>
         <SectionHeader

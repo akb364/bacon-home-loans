@@ -19,6 +19,18 @@ const programs = [
     href: "/fha-loans-arizona"
   },
   {
+    title: "Conventional Loans",
+    benefit: "Learn when conventional financing may offer lower long-term costs and more flexibility.",
+    points: ["3% down options", "Cancellable mortgage insurance", "Primary or repeat buyer paths"],
+    href: "/conventional-loans-arizona"
+  },
+  {
+    title: "VA Loans",
+    benefit: "Understand the benefits available to eligible Veterans, service members, and spouses.",
+    points: ["Potential zero down payment", "No monthly PMI", "COE and entitlement review"],
+    href: "/va-loans-arizona"
+  },
+  {
     title: "Down Payment Assistance",
     benefit: "See whether assistance can reduce upfront cash without weakening your buying strategy.",
     points: ["Program eligibility check", "Assistance term review", "Timeline and offer planning"],
@@ -85,7 +97,7 @@ export default function Home() {
           title="Arizona mortgage options, explained in plain English."
           description="Whether you are buying your first home, comparing FHA, or looking for down payment help, the goal is a loan plan that fits your timeline and your monthly comfort zone."
         />
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {programs.map((program) => (
             <Link
               key={program.title}

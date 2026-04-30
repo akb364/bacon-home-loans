@@ -6,6 +6,8 @@ const navItems = [
   { href: "/", label: "Home" },
   { href: "/first-time-home-buyer-programs-arizona", label: "First-Time Buyers" },
   { href: "/fha-loans-arizona", label: "FHA Loans" },
+  { href: "/conventional-loans-arizona", label: "Conventional" },
+  { href: "/va-loans-arizona", label: "VA Loans" },
   { href: "/down-payment-assistance-arizona", label: "Down Payment Help" },
   { href: "/contact", label: "Contact" }
 ];

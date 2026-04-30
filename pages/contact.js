@@ -37,6 +37,8 @@ const creditScoreOptions = [
 const loanGoalOptions = [
   "Buy my first home",
   "Use an FHA loan",
+  "Use a conventional loan",
+  "Use a VA loan",
   "Find down payment assistance",
   "Compare loan options",
   "Refinance or other question"
