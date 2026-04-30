@@ -13,8 +13,11 @@ const initialValues = {
   purchaseTimeline: "",
   estimatedCreditScore: "",
   loanGoal: "",
-  message: ""
+  message: "",
+  website: ""
 };
+
+const leadEndpoint = process.env.NEXT_PUBLIC_LEAD_ENDPOINT || "";
 
 const timelineOptions = [
   "Now to 30 days",
@@ -105,6 +108,7 @@ export default function Contact() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function updateField(event) {
     const { name, value } = event.target;
@@ -113,7 +117,7 @@ export default function Contact() {
     setStatus("");
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const nextErrors = validate(values);
 
@@ -124,9 +128,41 @@ export default function Contact() {
     }
 
     setErrors({});
-    setStatus(
-      "Thanks. Your information was captured on this page only. No data was sent because a backend is not connected yet."
-    );
+    setIsSubmitting(true);
+
+    if (!leadEndpoint) {
+      setStatus(
+        "Thanks. This form is ready to send leads once the Google Sheets endpoint is configured."
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      await fetch(leadEndpoint, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+          ...values,
+          source: "Bacon Home Loans website",
+          submittedAt: new Date().toISOString()
+        })
+      });
+
+      setValues(initialValues);
+      setStatus(
+        "Thanks. Your message has been sent, and Austin will review your information soon."
+      );
+    } catch (error) {
+      setStatus(
+        "Something went wrong sending the form. Please call or email Austin directly, or try again in a moment."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -172,6 +208,17 @@ export default function Contact() {
             noValidate
             className="rounded-md border border-slate-200 bg-white p-6 shadow-soft"
           >
+            <div className="hidden" aria-hidden="true">
+              <label htmlFor="website">Website</label>
+              <input
+                id="website"
+                name="website"
+                tabIndex="-1"
+                autoComplete="off"
+                value={values.website}
+                onChange={updateField}
+              />
+            </div>
             <div className="grid gap-5 md:grid-cols-2">
               <div className="md:col-span-2">
                 <label className="label" htmlFor="fullName">
@@ -333,9 +380,10 @@ export default function Contact() {
             </div>
             <button
               type="submit"
-              className="mt-6 rounded-md bg-saguaro-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-saguaro-500"
+              disabled={isSubmitting}
+              className="mt-6 rounded-md bg-saguaro-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-saguaro-500 disabled:cursor-not-allowed disabled:bg-slate-400"
             >
-              See What You Qualify For
+              {isSubmitting ? "Sending..." : "See What You Qualify For"}
             </button>
             {status && (
               <div className="mt-5 rounded-md border border-saguaro-500/30 bg-saguaro-500/10 p-4 text-sm font-semibold leading-6 text-saguaro-700">
