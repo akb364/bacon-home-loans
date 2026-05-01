@@ -15,7 +15,7 @@ const initialValues = {
   estimatedCreditScore: "",
   loanGoal: "",
   message: "",
-  website: ""
+  website: "",
 };
 
 const leadEndpoint = process.env.NEXT_PUBLIC_LEAD_ENDPOINT || "";
@@ -25,7 +25,7 @@ const timelineOptions = [
   "1 to 3 months",
   "3 to 6 months",
   "6+ months",
-  "Just researching"
+  "Just researching",
 ];
 
 const creditScoreOptions = [
@@ -35,17 +35,16 @@ const creditScoreOptions = [
   "640-679",
   "600-639",
   "Below 600",
-  "Not sure"
+  "Not sure",
 ];
 
 const loanGoalOptions = [
   "Buy my first home",
-  "Use an FHA loan",
-  "Use a conventional loan",
   "Use a VA loan",
-  "Find down payment assistance",
   "Compare loan options",
-  "Refinance or other question"
+  "Second home/Investment home",
+  "Refinance",
+  "General questions",
 ];
 
 function validate(values) {
@@ -133,7 +132,7 @@ export default function Contact() {
 
     if (!leadEndpoint) {
       setStatus(
-        "Thanks. This form is ready to send leads once the Google Sheets endpoint is configured."
+        "Thanks. This form is ready to send leads once the Google Sheets endpoint is configured.",
       );
       setIsSubmitting(false);
       return;
@@ -144,22 +143,22 @@ export default function Contact() {
         method: "POST",
         mode: "no-cors",
         headers: {
-          "Content-Type": "text/plain;charset=utf-8"
+          "Content-Type": "text/plain;charset=utf-8",
         },
         body: JSON.stringify({
           ...values,
           source: "Bacon Home Loans website",
-          submittedAt: new Date().toISOString()
-        })
+          submittedAt: new Date().toISOString(),
+        }),
       });
 
       setValues(initialValues);
       setStatus(
-        "Thanks. Your message has been sent, and Austin will review your information soon."
+        "Thanks. Your message has been sent, and Austin will review your information soon.",
       );
     } catch (error) {
       setStatus(
-        "Something went wrong sending the form. Please call or email Austin directly, or try again in a moment."
+        "Something went wrong sending the form. Please call or email Austin directly, or try again in a moment.",
       );
     } finally {
       setIsSubmitting(false);
@@ -184,7 +183,9 @@ export default function Contact() {
             <div className="mt-8 flex items-center gap-4 rounded-md border border-slate-200 bg-white p-5 shadow-sm">
               <Headshot className="h-24 w-24 shrink-0" />
               <div>
-                <p className="text-lg font-black text-ink">{siteConfig.officerName}</p>
+                <p className="text-lg font-black text-ink">
+                  {siteConfig.officerName}
+                </p>
                 <p className="mt-1 text-sm leading-6 text-slate-600">
                   Arizona mortgage loan officer
                   <br />
@@ -197,7 +198,9 @@ export default function Contact() {
                 Direct
               </p>
               <div className="mt-3 text-lg font-black text-ink">
-                <a href={`tel:${siteConfig.phone}`}>{siteConfig.phoneDisplay}</a>
+                <a href={`tel:${siteConfig.phone}`}>
+                  {siteConfig.phoneDisplay}
+                </a>
               </div>
               <div className="mt-1 text-sm text-slate-600">
                 <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
@@ -207,10 +210,13 @@ export default function Contact() {
               </p>
             </div>
             <div className="mt-5 rounded-md border border-saguaro-500/20 bg-saguaro-500/10 p-5">
-              <p className="text-sm font-black text-saguaro-700">What happens next</p>
+              <p className="text-sm font-black text-saguaro-700">
+                What happens next
+              </p>
               <p className="mt-2 text-sm leading-6 text-slate-700">
-                A loan officer can review your goals, discuss documentation, and explain potential
-                next steps. No approval decision is made from this form.
+                A loan officer can review your goals, discuss documentation, and
+                explain potential next steps. No approval decision is made from
+                this form.
               </p>
             </div>
           </div>
@@ -244,7 +250,9 @@ export default function Contact() {
                   onChange={updateField}
                   autoComplete="name"
                   aria-invalid={Boolean(errors.fullName)}
-                  aria-describedby={errors.fullName ? "fullName-error" : undefined}
+                  aria-describedby={
+                    errors.fullName ? "fullName-error" : undefined
+                  }
                 />
                 <ErrorMessage id="fullName-error" message={errors.fullName} />
               </div>
@@ -313,7 +321,11 @@ export default function Contact() {
                   value={values.purchaseTimeline}
                   onChange={updateField}
                   aria-invalid={Boolean(errors.purchaseTimeline)}
-                  aria-describedby={errors.purchaseTimeline ? "purchaseTimeline-error" : undefined}
+                  aria-describedby={
+                    errors.purchaseTimeline
+                      ? "purchaseTimeline-error"
+                      : undefined
+                  }
                 >
                   <option value="" disabled>
                     Select one
@@ -322,7 +334,10 @@ export default function Contact() {
                     <option key={option}>{option}</option>
                   ))}
                 </select>
-                <ErrorMessage id="purchaseTimeline-error" message={errors.purchaseTimeline} />
+                <ErrorMessage
+                  id="purchaseTimeline-error"
+                  message={errors.purchaseTimeline}
+                />
               </div>
               <div>
                 <label className="label" htmlFor="estimatedCreditScore">
@@ -336,7 +351,9 @@ export default function Contact() {
                   onChange={updateField}
                   aria-invalid={Boolean(errors.estimatedCreditScore)}
                   aria-describedby={
-                    errors.estimatedCreditScore ? "estimatedCreditScore-error" : undefined
+                    errors.estimatedCreditScore
+                      ? "estimatedCreditScore-error"
+                      : undefined
                   }
                 >
                   <option value="" disabled>
@@ -362,7 +379,9 @@ export default function Contact() {
                   value={values.loanGoal}
                   onChange={updateField}
                   aria-invalid={Boolean(errors.loanGoal)}
-                  aria-describedby={errors.loanGoal ? "loanGoal-error" : undefined}
+                  aria-describedby={
+                    errors.loanGoal ? "loanGoal-error" : undefined
+                  }
                 >
                   <option value="" disabled>
                     Select one
@@ -385,7 +404,9 @@ export default function Contact() {
                   onChange={updateField}
                   placeholder="Share the city, price range, or questions you want help with."
                   aria-invalid={Boolean(errors.message)}
-                  aria-describedby={errors.message ? "message-error" : undefined}
+                  aria-describedby={
+                    errors.message ? "message-error" : undefined
+                  }
                 />
                 <ErrorMessage id="message-error" message={errors.message} />
               </div>
