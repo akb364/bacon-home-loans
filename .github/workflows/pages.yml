@@ -36,6 +36,7 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: https://baconhomeloans.com
           NEXT_PUBLIC_LEAD_ENDPOINT: ${{ secrets.LEAD_ENDPOINT }}
+          NEXT_PUBLIC_GA_ID: ${{ secrets.GA_MEASUREMENT_ID }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

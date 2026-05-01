@@ -44,14 +44,20 @@ A      @     185.199.108.153
 A      @     185.199.109.153
 A      @     185.199.110.153
 A      @     185.199.111.153
+AAAA   @     2606:50c0:8000::153
+AAAA   @     2606:50c0:8001::153
+AAAA   @     2606:50c0:8002::153
+AAAA   @     2606:50c0:8003::153
 ```
 
-Optional but recommended for `www.baconhomeloans.com`:
+Add this record for `www.baconhomeloans.com`:
 
 ```text
 Type   Name  Value
-CNAME  www   YOUR-GITHUB-USERNAME.github.io
+CNAME  www   akb364.github.io
 ```
+
+Remove any conflicting `A`, `AAAA`, `CNAME`, `ALIAS`, `URL Redirect`, `Masked Redirect`, or parking records for `@` or `www`.
 
 After DNS is added, open the repository on GitHub and go to:
 
@@ -123,6 +129,47 @@ For local testing, create `.env.local`:
 
 ```bash
 NEXT_PUBLIC_LEAD_ENDPOINT=YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL
+```
+
+Then restart the dev server.
+
+## Google Analytics
+
+The site supports Google Analytics 4 through a Measurement ID.
+
+### Create A GA4 Web Stream
+
+1. Go to Google Analytics.
+2. Create or open the property for Bacon Home Loans.
+3. Go to `Admin -> Data streams -> Web`.
+4. Add the website URL:
+
+```text
+https://baconhomeloans.com
+```
+
+5. Copy the Measurement ID. It looks like:
+
+```text
+G-XXXXXXXXXX
+```
+
+### Configure GitHub Pages
+
+Add the Measurement ID as a GitHub repository secret:
+
+```text
+Settings -> Secrets and variables -> Actions -> New repository secret
+Name: GA_MEASUREMENT_ID
+Value: G-XXXXXXXXXX
+```
+
+The GitHub Pages workflow passes that value into the static build as `NEXT_PUBLIC_GA_ID`.
+
+For local testing, add it to `.env.local`:
+
+```bash
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 ```
 
 Then restart the dev server.
