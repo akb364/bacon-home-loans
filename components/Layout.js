@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import siteConfig from "../lib/siteConfig";
@@ -31,10 +32,16 @@ function NavLink({ href, label }) {
 }
 
 export default function Layout({ children }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  const activeItem =
+    navItems.find((item) => item.href === router.pathname) ||
+    navItems.find((item) => item.href === "/");
+
   return (
     <div className="min-h-screen bg-slate-50 pb-20 md:pb-0">
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-4 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-4 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <Link href="/" className="flex items-center gap-3" aria-label={siteConfig.brandName}>
             <span className="grid h-11 w-11 place-items-center rounded-md bg-saguaro-700 text-lg font-black text-white">
               BH
@@ -48,7 +55,43 @@ export default function Layout({ children }) {
               </span>
             </span>
           </Link>
-          <nav className="flex flex-wrap items-center gap-2" aria-label="Main navigation">
+          <div className="relative lg:hidden">
+            <button
+              type="button"
+              className="flex w-full items-center justify-between rounded-md border border-slate-300 bg-white px-4 py-3 text-left text-sm font-bold text-ink shadow-sm"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+            >
+              <span>{activeItem.label}</span>
+              <span className="text-lg leading-none text-saguaro-700" aria-hidden="true">
+                {mobileMenuOpen ? "-" : "+"}
+              </span>
+            </button>
+            {mobileMenuOpen ? (
+              <nav
+                id="mobile-navigation"
+                className="absolute left-0 right-0 top-full z-40 mt-2 overflow-hidden rounded-md border border-slate-200 bg-white shadow-soft"
+                aria-label="Mobile navigation"
+              >
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold last:border-b-0 ${
+                      router.pathname === item.href
+                        ? "bg-saguaro-700 text-white"
+                        : "text-slate-700 hover:bg-slate-50 hover:text-saguaro-700"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            ) : null}
+          </div>
+          <nav className="hidden flex-wrap items-center gap-2 lg:flex" aria-label="Main navigation">
             {navItems.map((item) => (
               <NavLink key={item.href} {...item} />
             ))}
