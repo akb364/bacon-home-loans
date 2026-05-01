@@ -132,3 +132,44 @@ NEXT_PUBLIC_LEAD_ENDPOINT=YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL
 ```
 
 Then restart the dev server.
+
+## Google Analytics
+
+The site supports Google Analytics 4 through a Measurement ID.
+
+### Create A GA4 Web Stream
+
+1. Go to Google Analytics.
+2. Create or open the property for Bacon Home Loans.
+3. Go to `Admin -> Data streams -> Web`.
+4. Add the website URL:
+
+```text
+https://baconhomeloans.com
+```
+
+5. Copy the Measurement ID. It looks like:
+
+```text
+G-XXXXXXXXXX
+```
+
+### Configure GitHub Pages
+
+Add the Measurement ID as a GitHub repository secret:
+
+```text
+Settings -> Secrets and variables -> Actions -> New repository secret
+Name: GA_MEASUREMENT_ID
+Value: G-XXXXXXXXXX
+```
+
+The GitHub Pages workflow passes that value into the static build as `NEXT_PUBLIC_GA_ID`.
+
+For local testing, add it to `.env.local`:
+
+```bash
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
+Then restart the dev server.
