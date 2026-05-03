@@ -178,7 +178,7 @@ export default function Contact() {
             <SectionHeader
               eyebrow="Contact"
               title="See what you may qualify for."
-              description={`Share the basics with ${siteConfig.officerName}, NMLS ID: ${siteConfig.nmlsId}, so the next conversation can focus on loan options, payment comfort, and Arizona program fit. This demo form is not connected to a backend yet.`}
+              description={`Share the basics with ${siteConfig.officerName}, NMLS ID: ${siteConfig.nmlsId}, so the next conversation can focus on loan options, payment comfort, and Arizona program fit.`}
             />
             <div className="mt-8 flex items-center gap-4 rounded-md border border-slate-200 bg-white p-5 shadow-sm">
               <Headshot className="h-24 w-24 shrink-0" />
