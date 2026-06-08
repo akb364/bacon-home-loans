@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AffordabilityCalculator from "../components/AffordabilityCalculator";
 import Disclaimer from "../components/Disclaimer";
 import Headshot from "../components/Headshot";
 import Layout from "../components/Layout";
@@ -7,6 +8,12 @@ import { Section, SectionHeader } from "../components/Section";
 import TrustSection from "../components/TrustSection";
 
 const programs = [
+  {
+    title: "Arizona Affordability Calculator",
+    benefit: "Estimate how much home you may be able to afford using income, debts, down payment, taxes, insurance, and HOA dues.",
+    points: ["Payment-first planning", "Arizona tax and insurance inputs", "Pre-approval conversation starter"],
+    href: "/how-much-home-can-i-afford-arizona"
+  },
   {
     title: "First-Time Home Buyer Programs",
     benefit: "Map out your budget, loan type, and cash-to-close before you start touring homes.",
@@ -133,6 +140,25 @@ export default function Home() {
       </Section>
 
       <TrustSection />
+
+      <section className="bg-white">
+        <Section>
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <SectionHeader
+              eyebrow="Affordability Calculator"
+              title="How much home can I afford in Arizona?"
+              description="Test income, debts, down payment, taxes, insurance, and HOA dues before you start shopping. The result is a planning estimate, not a loan approval."
+            />
+            <AffordabilityCalculator compact />
+          </div>
+          <Link
+            href="/how-much-home-can-i-afford-arizona"
+            className="mt-7 inline-block rounded-md bg-saguaro-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-saguaro-500"
+          >
+            Open The Full Calculator
+          </Link>
+        </Section>
+      </section>
 
       <section className="bg-white">
         <Section>

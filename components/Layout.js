@@ -5,6 +5,7 @@ import siteConfig from "../lib/siteConfig";
 
 const navItems = [
   { href: "/", label: "Home" },
+  { href: "/how-much-home-can-i-afford-arizona", label: "Affordability" },
   { href: "/first-time-home-buyer-programs-arizona", label: "First-Time Buyers" },
   { href: "/fha-loans-arizona", label: "FHA Loans" },
   { href: "/conventional-loans-arizona", label: "Conventional" },
