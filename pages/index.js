@@ -15,22 +15,16 @@ const programs = [
     href: "/how-much-home-can-i-afford-arizona"
   },
   {
-    title: "First-Time Home Buyer Programs",
-    benefit: "Map out your budget, loan type, and cash-to-close before you start touring homes.",
-    points: ["Low down payment paths", "Buyer education guidance", "Offer-ready pre-approval"],
-    href: "/first-time-home-buyer-programs-arizona"
+    title: "Home Buying Roadmap",
+    benefit: "Follow the process from affordability and pre-approval through realtor search, offer, underwriting, and closing day.",
+    points: ["Seven-step buying path", "Pre-approval timeline", "Offer-to-closing guidance"],
+    href: "/home-buying-roadmap-arizona"
   },
   {
-    title: "FHA Loans",
-    benefit: "Compare flexible FHA guidelines against your monthly payment and long-term plan.",
-    points: ["Flexible credit review", "Lower down payment option", "Property condition guidance"],
-    href: "/fha-loans-arizona"
-  },
-  {
-    title: "Conventional Loans",
-    benefit: "Learn when conventional financing may offer lower long-term costs and more flexibility.",
-    points: ["3% down options", "Cancellable mortgage insurance", "Primary or repeat buyer paths"],
-    href: "/conventional-loans-arizona"
+    title: "FHA vs Conventional Loans",
+    benefit: "Compare down payment, credit flexibility, mortgage insurance, property standards, and long-term cost side by side.",
+    points: ["FHA flexibility review", "Conventional cost comparison", "Payment and offer strategy"],
+    href: "/fha-vs-conventional-loans-arizona"
   },
   {
     title: "VA Loans",
@@ -58,7 +52,7 @@ export default function Home() {
     <Layout>
       <Seo
         title="Arizona Mortgage Loan Officer Austin Bacon"
-        description="Austin Bacon, NMLS ID 2728600, helps Arizona home buyers compare FHA loans, first-time buyer programs, and down payment assistance. Powered by Artemis Mortgage."
+        description="Austin Bacon, NMLS ID 2728600, helps Arizona home buyers check affordability, follow a home buying roadmap, and compare FHA, conventional, VA, and down payment assistance options. Powered by Artemis Mortgage."
         path="/"
       />
       <section className="relative min-h-[680px] overflow-hidden bg-ink text-white">
@@ -99,10 +93,10 @@ export default function Home() {
               See What You Qualify For
             </Link>
             <Link
-              href="/first-time-home-buyer-programs-arizona"
+              href="/home-buying-roadmap-arizona"
               className="rounded-md border border-white/50 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
             >
-              Explore Buyer Programs
+              View The Roadmap
             </Link>
           </div>
         </div>

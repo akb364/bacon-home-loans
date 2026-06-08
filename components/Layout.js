@@ -6,9 +6,8 @@ import siteConfig from "../lib/siteConfig";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/how-much-home-can-i-afford-arizona", label: "Affordability" },
-  { href: "/first-time-home-buyer-programs-arizona", label: "First-Time Buyers" },
-  { href: "/fha-loans-arizona", label: "FHA Loans" },
-  { href: "/conventional-loans-arizona", label: "Conventional" },
+  { href: "/home-buying-roadmap-arizona", label: "Roadmap" },
+  { href: "/fha-vs-conventional-loans-arizona", label: "FHA vs Conv." },
   { href: "/va-loans-arizona", label: "VA Loans" },
   { href: "/down-payment-assistance-arizona", label: "Down Payment Help" },
   { href: "/contact", label: "Contact" }
