@@ -13,7 +13,11 @@ export default function Seo({ title, description, path = "/" }) {
     url: siteConfig.siteUrl,
     telephone: siteConfig.phoneDisplay,
     email: siteConfig.email,
-    areaServed: "Arizona",
+    areaServed: [
+      { "@type": "State", name: "Arizona" },
+      { "@type": "City", name: "Phoenix" },
+      { "@type": "AdministrativeArea", name: "Maricopa County" }
+    ],
     address: {
       "@type": "PostalAddress",
       addressLocality: siteConfig.city,

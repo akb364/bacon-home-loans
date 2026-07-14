@@ -5,6 +5,7 @@ import siteConfig from "../lib/siteConfig";
 
 const navItems = [
   { href: "/", label: "Home" },
+  { href: "/mortgage-lender-phoenix-az", label: "Phoenix Loans" },
   { href: "/how-much-home-can-i-afford-arizona", label: "Affordability" },
   { href: "/home-buying-roadmap-arizona", label: "Roadmap" },
   { href: "/fha-vs-conventional-loans-arizona", label: "FHA vs Conv." },
@@ -104,7 +105,8 @@ export default function Layout({ children }) {
           <div>
             <p className="text-lg font-black text-ink">{siteConfig.brandName}</p>
             <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
-              Arizona mortgage guidance from {siteConfig.officerName}, NMLS ID:{" "}
+              Mortgage education for buyers in Phoenix, Gilbert, the East Valley, and across
+              Arizona from {siteConfig.officerName}, NMLS ID:{" "}
               {siteConfig.nmlsId}. Powered by {siteConfig.brokerageName}.
             </p>
           </div>

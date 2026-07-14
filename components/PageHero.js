@@ -21,8 +21,8 @@ export default function PageHero({
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">{description}</p>
           <p className="mt-4 max-w-xl text-sm font-semibold leading-6 text-slate-500">
-            No backend is connected yet. This starts the conversation and helps organize your next
-            steps.
+            Educational information for Arizona home buyers. Loan options and eligibility depend
+            on your complete application and current program guidelines.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link

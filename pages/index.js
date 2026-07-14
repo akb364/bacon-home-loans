@@ -51,8 +51,8 @@ export default function Home() {
   return (
     <Layout>
       <Seo
-        title="Arizona Mortgage Loan Officer Austin Bacon"
-        description="Austin Bacon, NMLS ID 2728600, helps Arizona home buyers check affordability, follow a home buying roadmap, and compare FHA, conventional, VA, and down payment assistance options. Powered by Artemis Mortgage."
+        title="Arizona Mortgage Lender Education | Austin Bacon"
+        description="Arizona mortgage education for buyers in Phoenix, Gilbert, the East Valley, and statewide. Compare FHA, conventional, VA, affordability, and down payment options with Austin Bacon, NMLS 2728600."
         path="/"
       />
       <section className="relative min-h-[680px] overflow-hidden bg-ink text-white">
@@ -67,11 +67,11 @@ export default function Home() {
             Arizona Mortgage Guidance
           </p>
           <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-tight sm:text-6xl lg:text-7xl">
-            Home loans made clearer for Arizona buyers.
+            Arizona home loans, explained for Arizona buyers.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100">
-            Work with Austin Bacon, an Arizona mortgage loan officer, to compare programs,
-            understand the numbers, and move through your mortgage process with a calm plan.
+            Learn how FHA, conventional, VA, and assistance options apply to buyers in Phoenix,
+            Gilbert, the East Valley, and communities across Arizona—before you choose a loan.
           </p>
           <p className="mt-4 text-sm font-bold uppercase tracking-[0.16em] text-desert-100">
             NMLS ID: 2728600 | Powered by Artemis Mortgage
@@ -97,6 +97,12 @@ export default function Home() {
               className="rounded-md border border-white/50 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
             >
               View The Roadmap
+            </Link>
+            <Link
+              href="/mortgage-lender-phoenix-az"
+              className="rounded-md border border-white/50 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
+            >
+              Phoenix Buyer Guide
             </Link>
           </div>
         </div>
