@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { calculateMortgage } from "@/calculations/mortgage";
 import type { LoanAssumptions, LoanProgram } from "@/domain/loan";
 import type { NormalizedProperty, SourcedValue } from "@/domain/property";
@@ -79,6 +80,7 @@ export default function Home() {
         <a className="brand" href="#"><span className="brand-mark">B</span><span>Bacon Home Loans<small>Property Report Engine</small></span></a>
         <div className="header-actions">
           <span className="status-dot"><i /> API-free manual workspace</span>
+          <Link className="button ghost" href="/buying-power">Buying power</Link>
           <button className="button ghost" onClick={saveDraft}>Save draft</button>
           {view === "report" && <button className="button primary" onClick={() => window.print()}>Export PDF</button>}
         </div>

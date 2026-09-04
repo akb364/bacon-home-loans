@@ -12,6 +12,7 @@ An independent, API-less Next.js application for reusable property analysis and 
 - “Austin's Take” generated only from calculated category results
 - Responsive browser report with print-to-PDF styling
 - Local draft persistence for the scaffold stage
+- API-less Buying Power comparison with three scenarios, overrides, target payment, five-year loan snapshot, and print-ready client report
 - PostgreSQL/Supabase-ready schema that preserves immutable report snapshots
 - Manual-first workflow with an optional future RentCast adapter boundary
 
@@ -51,6 +52,7 @@ src/calculations/                Pure financial calculation modules
 src/domain/                      Normalized domain contracts
 src/providers/                   Replaceable property-data adapters
 src/scoring/                     Configurable Report Card engine
+src/buying-power/                Scenario domain model, calculations, and tests
 ```
 
 Planned additions retain the same boundaries:
