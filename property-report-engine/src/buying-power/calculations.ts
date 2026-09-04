@@ -22,7 +22,9 @@ export function calculateScenario(scenario: BuyingPowerScenarioInput, shared: Bu
   const price = nonnegative(scenario.purchasePrice, "Purchase price"); const override = scenario.overrides;
   const inherited = <T>(key: keyof typeof override, fallback: T): T => (override[key] ?? fallback) as T;
   const origin = (key: keyof typeof override) => override[key] === undefined ? "inherited" as const : "overridden" as const;
-  const downPayment = override.downPaymentAmount === undefined ? price.mul(shared.downPaymentPercent).div(100) : nonnegative(override.downPaymentAmount, "Down payment");
+  const downPayment = override.downPaymentAmount !== undefined
+    ? nonnegative(override.downPaymentAmount, "Down payment")
+    : price.mul(override.downPaymentPercent ?? shared.downPaymentPercent).div(100);
   const loanAmount = D(calculateLoanAmount(price.toNumber(), downPayment.toNumber())); const rate = inherited("interestRate", shared.interestRate);
   const taxes = D(inherited("annualPropertyTaxes", shared.annualPropertyTaxes)).div(12); const insurance = D(inherited("annualHomeownersInsurance", shared.annualHomeownersInsurance)).div(12);
   const mi = D(inherited("monthlyMortgageInsurance", shared.monthlyMortgageInsurance)); const hoa = D(inherited("monthlyHoa", shared.monthlyHoa));
@@ -36,6 +38,6 @@ export function calculateScenario(scenario: BuyingPowerScenarioInput, shared: Bu
     interestRate: rate, apr: override.apr ?? shared.apr, monthlyPrincipalAndInterest: money(pi), monthlyTaxes: money(taxes), monthlyInsurance: money(insurance), monthlyMortgageInsurance: money(mi), monthlyHoa: money(hoa), totalMonthlyHousingPayment: money(payment),
     closingCosts: money(closing), prepaidEscrows: money(shared.prepaidEscrows), discountPoints: money(points), sellerConcessions: money(concessions), lenderCredits: money(shared.lenderCredits), cashToClose: money(cash), potentialUnusedSellerCredit: money(unusedCredit),
     remainingBalanceAtHoldingPeriod: money(remaining), principalPaidAtHoldingPeriod: money(principalPaid), interestPaidAtHoldingPeriod: money(interestPaid), targetPaymentDifference: shared.targetMonthlyPayment === null ? null : money(payment.minus(shared.targetMonthlyPayment)),
-    origins: { purchasePrice: "manual", downPayment: override.downPaymentAmount === undefined ? "calculated" : "overridden", interestRate: origin("interestRate"), apr: origin("apr"), propertyTaxes: origin("annualPropertyTaxes"), homeownersInsurance: origin("annualHomeownersInsurance"), mortgageInsurance: origin("monthlyMortgageInsurance"), hoa: origin("monthlyHoa"), closingCosts: origin("closingCosts"), sellerConcessions: origin("sellerConcessions") } };
+    origins: { purchasePrice: "manual", downPayment: override.downPaymentAmount === undefined && override.downPaymentPercent === undefined ? "calculated" : "overridden", interestRate: origin("interestRate"), apr: origin("apr"), propertyTaxes: origin("annualPropertyTaxes"), homeownersInsurance: origin("annualHomeownersInsurance"), hoa: origin("monthlyHoa"), mortgageInsurance: origin("monthlyMortgageInsurance"), closingCosts: origin("closingCosts"), sellerConcessions: origin("sellerConcessions") } };
 }
 export function calculateScenarioDifference(current: BuyingPowerScenarioResult, prior: BuyingPowerScenarioResult): ScenarioDifference { return { purchasePrice: money(D(current.purchasePrice).minus(prior.purchasePrice)), loanAmount: money(D(current.loanAmount).minus(prior.loanAmount)), monthlyPayment: money(D(current.totalMonthlyHousingPayment).minus(prior.totalMonthlyHousingPayment)), cashToClose: money(D(current.cashToClose).minus(prior.cashToClose)) }; }
