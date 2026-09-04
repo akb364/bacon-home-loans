@@ -1,6 +1,6 @@
-# Bacon Home Loans Property Report Engine
+# Artemis Mortgage Property Report Engine
 
-An independent Next.js application for reusable property analysis and Realtor marketing reports. Phase 1 establishes the shared data and calculation architecture and delivers the first browser-viewable Real Estate Report Card.
+An independent, API-less Next.js application for reusable property analysis and Realtor marketing reports. Phase 1 uses manually researched property inputs, establishes the shared calculation architecture, and delivers the first browser-viewable Real Estate Report Card without credentials, a database, or paid data services.
 
 ## Current MVP
 
@@ -12,8 +12,9 @@ An independent Next.js application for reusable property analysis and Realtor ma
 - “Austin's Take” generated only from calculated category results
 - Responsive browser report with print-to-PDF styling
 - Local draft persistence for the scaffold stage
+- API-less Buying Power comparison with three scenarios, overrides, target payment, five-year loan snapshot, and print-ready client report
 - PostgreSQL/Supabase-ready schema that preserves immutable report snapshots
-- Provider interface with manual and RentCast adapter boundaries
+- Manual-first workflow with an optional future RentCast adapter boundary
 
 ## Architecture
 
@@ -51,6 +52,7 @@ src/calculations/                Pure financial calculation modules
 src/domain/                      Normalized domain contracts
 src/providers/                   Replaceable property-data adapters
 src/scoring/                     Configurable Report Card engine
+src/buying-power/                Scenario domain model, calculations, and tests
 ```
 
 Planned additions retain the same boundaries:
@@ -78,6 +80,7 @@ src/repositories/                Supabase persistence interfaces
 6. **Decimal.js is used at financial boundaries.** UI formatting occurs only after calculation results are rounded to cents.
 7. **Missing scores are excluded.** The engine proportionally rebalances only the configured weights for categories with sufficient data. It does not turn missing information into a neutral or favorable score.
 8. **Investment formulas are already isolated.** The initial NOI, cap-rate, cash-on-cash, DSCR, and break-even occupancy module is tested now even though its report UI belongs to a later phase.
+9. **The Phase 1 deployment is a static export.** The current MVP has no API routes, so this keeps its hosting artifact simple and portable. Remove `output: "export"` when RentCast server routes, authenticated persistence, or server-side PDF generation are added.
 
 ## Scoring methodology
 
@@ -134,7 +137,7 @@ npm run build
 
 ## Environment
 
-Copy `.env.example` to `.env.local`. Manual mode is the safe default. The RentCast adapter intentionally fails explicitly until API access, endpoint contracts, rate-limit behavior, and sample responses can be verified.
+The API-less MVP needs no `.env.local` file. Draft inputs are stored locally in the browser. The RentCast adapter is dormant and intentionally fails explicitly until API access, endpoint contracts, rate-limit behavior, and sample responses can be verified.
 
 ## Incremental roadmap
 

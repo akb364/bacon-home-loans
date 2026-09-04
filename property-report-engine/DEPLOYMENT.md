@@ -23,17 +23,18 @@ Open the pull request, review it, and merge it into `main`. The existing GitHub 
 2. Connect GitHub if prompted and import `akb364/bacon-home-loans`.
 3. Set the project name to `bacon-property-report-engine`.
 4. Set **Root Directory** to `property-report-engine`.
-5. Keep **Framework Preset** as Next.js and leave the detected build settings unchanged.
-6. Add these environment variables for Production, Preview, and Development:
+5. Set **Framework Preset** to Next.js.
+6. Under **Build & Development Settings**, use the Next.js defaults:
+   - Build Command: `next build` (do not override)
+   - Output Directory: Next.js default (turn off the override; do not enter `public`)
+   - Install Command: `npm install` (do not override)
+7. Do not add environment variables. The API-less MVP requires none.
 
-```text
-PROPERTY_DATA_PROVIDER=manual
-NEXT_PUBLIC_APP_URL=https://report.baconhomeloans.com
-```
+8. Select **Deploy**.
 
-Do not add an empty `RENTCAST_API_KEY` or `DATABASE_URL`. Add real values later through Vercel's encrypted environment settings. Never create a `NEXT_PUBLIC_RENTCAST_API_KEY`.
+The included `vercel.json` also pins the framework to Next.js. A `public` folder is optional in Next.js and is not the application's build output; Vercel consumes the framework build directly.
 
-7. Select **Deploy**.
+The Phase 1 application uses Next.js static export because it has no server routes or API dependencies. Vercel still uses the Next.js preset; do not set an Output Directory override. Server rendering can be enabled later if server-side providers, persistence, or PDF routes are introduced.
 
 ## 3. Connect the subdomain
 
