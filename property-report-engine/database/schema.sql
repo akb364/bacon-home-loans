@@ -4,7 +4,7 @@ create extension if not exists pgcrypto;
 create table brand_settings (
   id uuid primary key default gen_random_uuid(),
   owner_user_id uuid not null,
-  brand_name text not null default 'Bacon Home Loans',
+  brand_name text not null default 'Artemis Mortgage',
   loan_officer_name text not null default 'Austin Bacon',
   brokerage text not null default 'Artemis Mortgage',
   phone text, email text, website text,

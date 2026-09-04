@@ -1,4 +1,4 @@
-# Bacon Home Loans Property Report Engine
+# Artemis Mortgage Property Report Engine
 
 An independent, API-less Next.js application for reusable property analysis and Realtor marketing reports. Phase 1 uses manually researched property inputs, establishes the shared calculation architecture, and delivers the first browser-viewable Real Estate Report Card without credentials, a database, or paid data services.
 
