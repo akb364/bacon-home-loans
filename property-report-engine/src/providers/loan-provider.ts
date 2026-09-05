@@ -1,0 +1,3 @@
+import type { LoanProgram } from "@/domain/loan";
+export interface LoanPricingSnapshot { externalLoanId?: string; purchasePrice: number; baseLoanAmount: number; totalLoanAmount: number; downPaymentAmount: number; downPaymentPercent: number; loanProgram: LoanProgram; interestRate: number; apr?: number; loanTermMonths: number; principalAndInterest: number; propertyTaxes: number; homeownersInsurance: number; mortgageInsurance: number; hoa: number; closingCosts?: number; prepaids?: number; sellerCredits?: number; lenderCredits?: number; discountPoints?: number; rateAsOf?: string; source: string; }
+export interface LoanDataProvider { getPricingSnapshots(reference: string): Promise<LoanPricingSnapshot[]>; }

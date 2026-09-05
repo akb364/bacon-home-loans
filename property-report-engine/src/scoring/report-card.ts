@@ -67,6 +67,6 @@ export function scoreReportCard(input: ScoreInputs, weights = DEFAULT_WEIGHTS): 
 }
 
 export const label = (category: ScoreCategory) => ({
-  priceVsMarket: "Price vs. market", affordability: "Affordability", appreciation: "Historical appreciation",
+  priceVsMarket: "Price vs. market", affordability: "Housing payment to income", appreciation: "Historical appreciation",
   rentalPotential: "Rental potential", marketConditions: "Market conditions", taxesAndHoa: "Taxes & HOA",
 })[category];

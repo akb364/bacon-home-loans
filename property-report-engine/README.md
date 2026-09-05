@@ -164,3 +164,9 @@ The API-less MVP needs no `.env.local` file. Draft inputs are stored locally in 
 ## Compliance baseline
 
 The MVP report states that it is not an appraisal, underwriting decision, loan approval, or guarantee. Mortgage, property value, rent, appreciation, return, rate, payment, and closing-cost figures are classified by provenance. Production reports should remain in `draft` or `review` status until approved through the compliance workflow.
+
+## Buying Power and future ARIVE imports
+
+Buying Power uses scenario-owned APR and pricing, reconciles only applied seller/lender credits, protects down payment from oversized credits, and supports deposits and verified total financed loan amounts. APR and government-program fees are never inferred. Final export requires complete licensing plus a recorded employer approval.
+
+`src/providers/loan-provider.ts` defines a provider-neutral `LoanPricingSnapshot`; it intentionally assumes no ARIVE field names. A future pipeline may use ARIVE → Zapier → authenticated server webhook → raw integration event → verified mapper → normalized snapshot → scenario builder. The present `output: "export"` build cannot receive webhooks. Supporting them requires authenticated Next.js server routes after removing static export, or a separate secure ingestion service. Credentials must never enter client-side code. Only report-required mortgage fields should be ingested—never SSNs, DOBs, bank information, credit-report data, or document contents.

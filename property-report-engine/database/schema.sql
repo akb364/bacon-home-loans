@@ -8,7 +8,10 @@ create table brand_settings (
   loan_officer_name text not null default 'Austin Bacon',
   brokerage text not null default 'Artemis Mortgage',
   phone text, email text, website text,
-  nmls_information text, brokerage_disclosures text,
+  loan_officer_title text, loan_officer_nmls_id text,
+  company_nmls_id text, company_state text,
+  company_license_type text, company_state_license_number text,
+  brokerage_disclosures text,
   logo_url text, headshot_url text,
   primary_color text not null default '#173f3a',
   accent_color text not null default '#c97b45',
@@ -96,7 +99,10 @@ create table reports (
   realtor_profile_id uuid references realtor_profiles(id),
   brand_settings_snapshot jsonb not null,
   report_type text not null, report_data_snapshot jsonb not null,
-  status text not null default 'draft', public_slug text unique, pdf_url text,
+  status text not null default 'draft' check (status in ('draft', 'ready_for_compliance', 'approved')),
+  approval_confirmed boolean not null default false,
+  approved_by text, approved_at timestamptz, approval_reference text,
+  public_slug text unique, pdf_url text,
   created_at timestamptz not null default now(), published_at timestamptz
 );
 

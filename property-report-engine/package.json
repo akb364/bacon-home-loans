@@ -11,7 +11,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --configLoader runner",
     "test:watch": "vitest"
   },
   "dependencies": {

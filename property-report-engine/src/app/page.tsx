@@ -82,7 +82,7 @@ export default function Home() {
           <span className="status-dot"><i /> API-free manual workspace</span>
           <Link className="button ghost" href="/buying-power">Buying power</Link>
           <button className="button ghost" onClick={saveDraft}>Save draft</button>
-          {view === "report" && <button className="button primary" onClick={() => window.print()}>Export PDF</button>}
+          {view === "report" && <button className="button primary" disabled title="Buyer export requires the shared advertising approval workflow">Export unavailable</button>}
         </div>
       </header>
 
@@ -123,7 +123,7 @@ export default function Home() {
               <Field label="Loan term"><select value={form.termYears} onChange={(e) => change("termYears", e.target.value)}><option value="30">30 years</option><option value="20">20 years</option><option value="15">15 years</option></select></Field>
               <MoneyField label="Annual insurance" field="insurance" value={form.insurance} change={change} />
               <MoneyField label="Monthly mortgage insurance" field="mortgageInsurance" value={form.mortgageInsurance} change={change} />
-              <MoneyField label="Gross monthly income" field="monthlyIncome" value={form.monthlyIncome} change={change} hint="Optional; enables affordability score" />
+              <MoneyField label="Gross monthly income" field="monthlyIncome" value={form.monthlyIncome} change={change} hint="Optional; payment-to-income indicator only. This is not DTI or qualification." />
             </FormSection>
             <div className="generate-bar"><div><span>Estimated payment</span><strong>{usd.format(mortgage.estimatedTotalHousingPayment)}<small>/mo</small></strong></div><button className="button primary large" disabled={!form.address || !form.purchasePrice} onClick={generate}>Generate report card <span>→</span></button></div>
           </section>
@@ -145,7 +145,7 @@ function MoneyField({ label, field, value, change, hint }: { label: string; fiel
 function Report({ property, form, mortgage, reportCard, onEdit }: { property: NormalizedProperty; form: FormState; mortgage: ReturnType<typeof calculateMortgage>; reportCard: ReturnType<typeof scoreReportCard>; onEdit: () => void }) {
   const available = (value: number | null, format = number.format) => value === null ? "Unavailable" : format(value);
   return <div className="report-shell">
-    <div className="report-toolbar no-print"><button className="text-button" onClick={onEdit}>← Edit assumptions</button><span>Browser report · Ready to print</span></div>
+    <div className="report-toolbar no-print"><button className="text-button" onClick={onEdit}>← Edit assumptions</button><span>Internal draft · Buyer export not approved</span></div>
     <article className="report">
       <header className="report-hero"><div className="report-brand"><span className="brand-mark light">A</span><div>Artemis Mortgage<small>Property financial report card</small></div></div><div className="report-date">Prepared {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</div><div className="address-block"><span>Arizona property analysis</span><h1>{property.address.line1}</h1><p>{[property.address.city, "AZ", property.address.postalCode].filter(Boolean).join(", ").replace(", AZ,", ", AZ ")}</p></div><div className="hero-facts"><div><span>Purchase price</span><strong>{usd.format(form.purchasePrice)}</strong></div><div><span>Property</span><strong>{form.bedrooms || "—"} bd · {form.bathrooms || "—"} ba</strong></div><div><span>Living area</span><strong>{form.squareFeet ? `${number.format(form.squareFeet)} sq ft` : "Unavailable"}</strong></div></div></header>
       <section className="score-section"><div className="overall"><div className="score-ring"><strong>{reportCard.overallScore ?? "—"}</strong><span>/ 100</span></div><div><span className="eyebrow">Overall financial score</span><h2>{reportCard.overallScore === null ? "Insufficient data" : `${reportCard.overallGrade} property profile`}</h2><p>Proprietary analytical score based only on the available inputs shown below.</p></div></div><div className="score-grid">{reportCard.categories.map((category) => <div className="score-card" key={category.category}><span>{label(category.category)}</span><strong>{category.grade}</strong><div className="bar"><i style={{ width: `${category.score ?? 0}%` }} /></div><small>{category.score === null ? "Data needed" : `${category.score} / 100`}</small></div>)}</div></section>

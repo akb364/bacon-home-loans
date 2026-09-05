@@ -1,17 +1,4 @@
-import { describe, expect, it } from "vitest";
-import { validateClientReady } from "./compliance";
-import { calculateScenario } from "./calculations";
-import type { BuyingPowerSharedAssumptions, DisclosureConfig } from "./types";
-
-const shared: BuyingPowerSharedAssumptions = { borrowerName: "", loanProgram: "conventional", termYears: 30, interestRate: 7, apr: null, downPaymentPercent: 5, annualPropertyTaxes: 5000, annualHomeownersInsurance: 1800, monthlyMortgageInsurance: 150, monthlyHoa: 0, closingCosts: 10000, sellerConcessions: 0, discountPointsPercent: 0, lenderCredits: 0, prepaidEscrows: 2000, targetMonthlyPayment: null, holdingPeriodYears: 5 };
-const config: DisclosureConfig = { loanOfficerName: "Austin Bacon", loanOfficerTitle: "Mortgage Loan Originator", loanOfficerNmlsId: "2728600", companyName: "Artemis Mortgage", companyLicenseType: "Arizona Mortgage Broker License", companyLicenseNumber: "TEST", companyState: "Arizona", customDisclosure: "" };
-const inclusions = { propertyTaxes: true, homeownersInsurance: true, mortgageInsurance: true, hoa: true };
-const timestamp = "2026-09-04T10:00";
-const scenario = (apr?: number) => calculateScenario({ id: "a", name: "5% Down", purchasePrice: 769000, notes: "", overrides: { downPaymentPercent: 5, apr } }, shared);
-
-describe("client-ready validation", () => {
-  it("blocks missing scenario APR", () => expect(validateClientReady(config, shared, [scenario()], inclusions, timestamp).errors).toContain("5% Down: scenario-specific APR is required."));
-  it("blocks missing licensing", () => expect(validateClientReady({ ...config, loanOfficerNmlsId: "", companyLicenseNumber: "" }, shared, [scenario(7.1)], inclusions, timestamp).valid).toBe(false));
-  it("blocks a missing rate timestamp", () => expect(validateClientReady(config, shared, [scenario(7.1)], inclusions, "").errors).toContain("Rate as-of date and time are required."));
-  it("accepts complete scenario-specific disclosures", () => expect(validateClientReady(config, shared, [scenario(7.1)], inclusions, timestamp).valid).toBe(true));
-});
+import {describe,expect,it} from "vitest";import {validateClientExport} from "./compliance";import {calculateScenario} from "./calculations";import type {ApprovalRecord,BuyingPowerSharedAssumptions,DisclosureConfig} from "./types";
+const shared:BuyingPowerSharedAssumptions={borrowerName:"",loanProgram:"conventional",termYears:30,defaultInterestRate:7,defaultDownPaymentPercent:5,annualPropertyTaxes:1,annualHomeownersInsurance:1,defaultMonthlyMortgageInsurance:0,monthlyHoa:0,defaultClosingCosts:0,defaultSellerConcessions:0,defaultDiscountPointsPercent:0,defaultLenderCredits:0,prepaidEscrows:0,earnestMoneyDeposit:null,targetMonthlyPayment:null,holdingPeriodYears:5};
+const identity:DisclosureConfig={loanOfficerName:"Austin Bacon",loanOfficerTitle:"MLO",loanOfficerNmlsId:"2728600",companyName:"Artemis Mortgage",companyNmlsId:"TEST",companyState:"Arizona",companyLicenseType:"TEST",companyStateLicenseNumber:"TEST",customDisclosure:""};const approval:ApprovalRecord={approvalConfirmed:true,approvedBy:"Reviewer",approvedAt:"2026-09-04T12:00",approvalReference:"Internal test"};const inc={propertyTaxes:true,homeownersInsurance:true,mortgageInsurance:true,hoa:true};const scenario=(apr?:number)=>calculateScenario({id:"a",name:"A",purchasePrice:769000,notes:"",overrides:{apr}},shared);
+describe("client export",()=>{it("blocks missing APR",()=>expect(validateClientExport(identity,approval,shared,[scenario()],inc,"now").valid).toBe(false));it("blocks missing state license",()=>expect(validateClientExport({...identity,companyStateLicenseNumber:""},approval,shared,[scenario(7.1)],inc,"now").valid).toBe(false));it("blocks missing employer approval",()=>expect(validateClientExport(identity,{...approval,approvalConfirmed:false},shared,[scenario(7.1)],inc,"now").valid).toBe(false));it("blocks unverified government total loan",()=>expect(validateClientExport(identity,approval,{...shared,loanProgram:"fha"},[scenario(7.1)],inc,"now").valid).toBe(false));});

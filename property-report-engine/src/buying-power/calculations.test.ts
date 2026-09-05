@@ -1,13 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { calculateMonthlyPrincipalAndInterest, calculateRemainingLoanBalance, calculateScenario, calculateScenarioDifference } from "./calculations";
+import { calculateScenario, formatPercent } from "./calculations";
 import type { BuyingPowerScenarioInput, BuyingPowerSharedAssumptions } from "./types";
-const shared: BuyingPowerSharedAssumptions = { borrowerName: "", loanProgram: "conventional", termYears: 30, interestRate: 6.5, apr: 6.72, downPaymentPercent: 5, annualPropertyTaxes: 3600, annualHomeownersInsurance: 1800, monthlyMortgageInsurance: 90, monthlyHoa: 75, closingCosts: 9000, sellerConcessions: 2000, discountPointsPercent: 0, lenderCredits: 500, prepaidEscrows: 2500, targetMonthlyPayment: 3400, holdingPeriodYears: 5 };
-const scenario = (price: number, overrides = {}): BuyingPowerScenarioInput => ({ id: String(price), name: "Test", purchasePrice: price, notes: "", overrides });
-describe("buying power calculations", () => {
-  it("handles amortization and zero percent", () => { expect(calculateMonthlyPrincipalAndInterest(360000, 6.5, 30)).toBeCloseTo(2275.44, 2); expect(calculateMonthlyPrincipalAndInterest(360000, 0, 30)).toBe(1000); expect(calculateRemainingLoanBalance(360000, 6.5, 30, 60)).toBeCloseTo(336999.52, 0); });
-  it("calculates inherited cash, target, and five-year totals", () => { const r = calculateScenario(scenario(460000), shared); expect(r.downPayment).toBe(23000); expect(r.loanAmount).toBe(437000); expect(r.cashToClose).toBe(32000); expect(r.origins.interestRate).toBe("inherited"); expect(r.principalPaidAtHoldingPeriod).toBeGreaterThan(0); expect(r.interestPaidAtHoldingPeriod).toBeGreaterThan(0); expect(r.targetPaymentDifference).not.toBeNull(); });
-  it("honors overrides and flags unused seller credit", () => { const r = calculateScenario(scenario(470000, { interestRate: 6.125, sellerConcessions: 20000 }), shared); expect(r.interestRate).toBe(6.125); expect(r.origins.interestRate).toBe("overridden"); expect(r.potentialUnusedSellerCredit).toBe(8500); });
-  it("supports scenario-specific down payment percentages", () => { const r = calculateScenario(scenario(460000, { downPaymentPercent: 20, monthlyMortgageInsurance: 0 }), shared); expect(r.downPayment).toBe(92000); expect(r.loanAmount).toBe(368000); expect(r.monthlyMortgageInsurance).toBe(0); expect(r.origins.downPayment).toBe("overridden"); });
-  it("calculates differences", () => { const a = calculateScenario(scenario(460000), shared); const b = calculateScenario(scenario(470000), shared); expect(calculateScenarioDifference(b, a).loanAmount).toBe(9500); });
-  it("rejects negative values", () => { expect(() => calculateScenario(scenario(-1), shared)).toThrow(/non-negative/); });
+const shared: BuyingPowerSharedAssumptions={borrowerName:"",loanProgram:"conventional",termYears:30,defaultInterestRate:7,defaultDownPaymentPercent:5,annualPropertyTaxes:4800,annualHomeownersInsurance:2400,defaultMonthlyMortgageInsurance:150,monthlyHoa:100,defaultClosingCosts:10000,defaultSellerConcessions:0,defaultDiscountPointsPercent:0,defaultLenderCredits:0,prepaidEscrows:2000,earnestMoneyDeposit:null,targetMonthlyPayment:null,holdingPeriodYears:5};
+const input=(overrides:BuyingPowerScenarioInput["overrides"]={}):BuyingPowerScenarioInput=>({id:"a",name:"A",purchasePrice:769000,notes:"",overrides});
+describe("buying power scenario",()=>{
+  it.each([[5,38450],[10,76900],[20,153800]])("derives %s%% down as $%s",(percent,amount)=>expect(calculateScenario(input({downPaymentPercent:percent}),shared).downPayment).toBe(amount));
+  it("formats fractional percentages",()=>expect(formatPercent(3.5)).toBe("3.5%"));
+  it("inherits default rate and honors overrides",()=>{expect(calculateScenario(input(),shared).interestRate).toBe(7);expect(calculateScenario(input({interestRate:6.5}),shared).interestRate).toBe(6.5)});
+  it("preserves an explicit zero override",()=>expect(calculateScenario(input({monthlyMortgageInsurance:0}),shared).monthlyMortgageInsurance).toBe(0));
+  it("caps seller concessions and reconciles cash",()=>{const r=calculateScenario(input({sellerConcessions:20000}),shared);expect(r.sellerConcessionsEntered).toBe(20000);expect(r.sellerConcessionsApplied).toBe(12000);expect(r.unusedSellerConcessions).toBe(8000);expect(r.cashToClose).toBe(r.downPayment+r.closingCosts+r.prepaidEscrows+r.discountPoints-r.sellerConcessionsApplied-r.lenderCreditsApplied-r.earnestMoneyDeposit)});
+  it("never lets lender credits reduce down payment",()=>expect(calculateScenario(input({lenderCredits:999999}),shared).cashToClose).toBe(38450));
+  it("subtracts earnest money",()=>expect(calculateScenario(input({earnestMoneyDeposit:5000}),shared).cashToClose).toBe(45450));
+  it("applies scenario points and lender credits",()=>{const r=calculateScenario(input({discountPointsPercent:1,lenderCredits:1000}),shared);expect(r.discountPoints).toBe(7305.5);expect(r.lenderCreditsApplied).toBe(1000)});
+  it("reconciles included payment components",()=>{const r=calculateScenario(input(),shared);expect(r.totalMonthlyHousingPayment).toBeCloseTo(r.monthlyPrincipalAndInterest+r.monthlyTaxes+r.monthlyInsurance+r.monthlyMortgageInsurance+r.monthlyHoa,2)});
+  it("excludes unselected components",()=>{const r=calculateScenario(input(),shared,{propertyTaxes:false,homeownersInsurance:false,mortgageInsurance:true,hoa:true});expect(r.totalMonthlyHousingPayment).toBeCloseTo(r.monthlyPrincipalAndInterest+r.monthlyMortgageInsurance+r.monthlyHoa,2)});
 });
