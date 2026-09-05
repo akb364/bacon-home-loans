@@ -1,6 +1,9 @@
 import type { LoanProgram } from "@/domain/loan";
 
 export type InputOrigin = "manual" | "inherited" | "overridden" | "calculated";
+export type ReportStatus = "draft" | "clientReady";
+export interface DisclosureConfig { loanOfficerName: string; loanOfficerTitle: string; loanOfficerNmlsId: string; companyName: string; companyLicenseType: string; companyLicenseNumber: string; companyState: string; customDisclosure: string; }
+export interface PaymentInclusions { propertyTaxes: boolean; homeownersInsurance: boolean; mortgageInsurance: boolean; hoa: boolean; }
 export interface BuyingPowerSharedAssumptions { borrowerName: string; loanProgram: LoanProgram; termYears: number; interestRate: number; apr: number | null; downPaymentPercent: number; annualPropertyTaxes: number; annualHomeownersInsurance: number; monthlyMortgageInsurance: number; monthlyHoa: number; closingCosts: number; sellerConcessions: number; discountPointsPercent: number; lenderCredits: number; prepaidEscrows: number; targetMonthlyPayment: number | null; holdingPeriodYears: number; }
 export interface ScenarioOverrides { interestRate?: number; apr?: number; downPaymentAmount?: number; downPaymentPercent?: number; annualPropertyTaxes?: number; annualHomeownersInsurance?: number; monthlyMortgageInsurance?: number; monthlyHoa?: number; closingCosts?: number; sellerConcessions?: number; }
 export interface BuyingPowerScenarioInput { id: string; name: string; purchasePrice: number; notes: string; overrides: ScenarioOverrides; }

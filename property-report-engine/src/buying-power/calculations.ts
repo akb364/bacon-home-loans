@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import type { BuyingPowerScenarioInput, BuyingPowerScenarioResult, BuyingPowerSharedAssumptions, ScenarioDifference } from "./types";
+import type { BuyingPowerScenarioInput, BuyingPowerScenarioResult, BuyingPowerSharedAssumptions, PaymentInclusions, ScenarioDifference } from "./types";
 
 const D = (value: Decimal.Value) => new Decimal(value);
 const money = (value: Decimal.Value) => D(value).toDecimalPlaces(2).toNumber();
@@ -18,7 +18,7 @@ export function calculateRemainingLoanBalance(principal: number, annualRate: num
   if (rate.eq(0)) return money(loan.mul(D(1).minus(D(paid).div(periods)))); const factor = rate.plus(1);
   return money(loan.mul(factor.pow(periods).minus(factor.pow(paid))).div(factor.pow(periods).minus(1)));
 }
-export function calculateScenario(scenario: BuyingPowerScenarioInput, shared: BuyingPowerSharedAssumptions): BuyingPowerScenarioResult {
+export function calculateScenario(scenario: BuyingPowerScenarioInput, shared: BuyingPowerSharedAssumptions, inclusions: PaymentInclusions = { propertyTaxes: true, homeownersInsurance: true, mortgageInsurance: true, hoa: true }): BuyingPowerScenarioResult {
   const price = nonnegative(scenario.purchasePrice, "Purchase price"); const override = scenario.overrides;
   const inherited = <T>(key: keyof typeof override, fallback: T): T => (override[key] ?? fallback) as T;
   const origin = (key: keyof typeof override) => override[key] === undefined ? "inherited" as const : "overridden" as const;
@@ -28,7 +28,8 @@ export function calculateScenario(scenario: BuyingPowerScenarioInput, shared: Bu
   const loanAmount = D(calculateLoanAmount(price.toNumber(), downPayment.toNumber())); const rate = inherited("interestRate", shared.interestRate);
   const taxes = D(inherited("annualPropertyTaxes", shared.annualPropertyTaxes)).div(12); const insurance = D(inherited("annualHomeownersInsurance", shared.annualHomeownersInsurance)).div(12);
   const mi = D(inherited("monthlyMortgageInsurance", shared.monthlyMortgageInsurance)); const hoa = D(inherited("monthlyHoa", shared.monthlyHoa));
-  const pi = D(calculateMonthlyPrincipalAndInterest(loanAmount.toNumber(), rate, shared.termYears)); const payment = pi.plus(taxes).plus(insurance).plus(mi).plus(hoa);
+  const pi = D(calculateMonthlyPrincipalAndInterest(loanAmount.toNumber(), rate, shared.termYears));
+  const payment = pi.plus(inclusions.propertyTaxes ? taxes : 0).plus(inclusions.homeownersInsurance ? insurance : 0).plus(inclusions.mortgageInsurance ? mi : 0).plus(inclusions.hoa ? hoa : 0);
   const closing = D(inherited("closingCosts", shared.closingCosts)); const concessions = D(inherited("sellerConcessions", shared.sellerConcessions)); const points = loanAmount.mul(shared.discountPointsPercent).div(100);
   const modeledCreditCapacity = closing.plus(shared.prepaidEscrows).plus(points); const appliedConcessions = Decimal.min(concessions, modeledCreditCapacity); const unusedCredit = Decimal.max(0, concessions.minus(modeledCreditCapacity));
   const cash = Decimal.max(0, downPayment.plus(closing).plus(shared.prepaidEscrows).plus(points).minus(appliedConcessions).minus(shared.lenderCredits));
