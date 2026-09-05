@@ -1,37 +1,16 @@
+import type { BuyingPowerScenarioResult, BuyingPowerSharedAssumptions, DisclosureConfig, PaymentInclusions, ReportStatus } from "./types";
 export type PrintFormat = "8x10" | "letter";
-
-export function printReport(format: PrintFormat) {
-  const style = document.createElement("style");
-  style.dataset.exportPageSize = format;
-  style.textContent = `@page{size:${format === "8x10" ? "8in 10in" : "letter portrait"};margin:.22in}`;
-  document.head.appendChild(style);
-  const cleanup = () => { style.remove(); window.removeEventListener("afterprint", cleanup); };
-  window.addEventListener("afterprint", cleanup);
-  window.print();
-}
-
-function inlineComputedStyles(source: Element, target: Element) {
-  const styles = getComputedStyle(source);
-  target.setAttribute("style", Array.from(styles).map((name) => `${name}:${styles.getPropertyValue(name)};`).join(""));
-  Array.from(source.children).forEach((child, index) => inlineComputedStyles(child, target.children[index]));
-}
-
-export async function exportReportPng(report: HTMLElement, filename: string) {
-  const clone = report.cloneNode(true) as HTMLElement;
-  clone.classList.add("report-format-8x10", "png-render");
-  clone.style.cssText += "position:fixed;left:-10000px;top:0;width:768px;height:960px;margin:0;box-shadow:none;";
-  document.body.appendChild(clone); inlineComputedStyles(clone, clone); clone.remove();
-  clone.style.position = "static"; clone.style.left = "auto"; clone.style.top = "auto";
-  const xml = new XMLSerializer().serializeToString(clone);
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3000" viewBox="0 0 768 960"><foreignObject width="768" height="960"><div xmlns="http://www.w3.org/1999/xhtml">${xml}</div></foreignObject></svg>`;
-  const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }));
-  try {
-    const image = new Image(); image.decoding = "sync";
-    await new Promise<void>((resolve, reject) => { image.onload = () => resolve(); image.onerror = () => reject(new Error("Unable to render the report image.")); image.src = url; });
-    const canvas = document.createElement("canvas"); canvas.width = 2400; canvas.height = 3000;
-    const context = canvas.getContext("2d"); if (!context) throw new Error("Canvas rendering is unavailable.");
-    context.fillStyle = "#ffffff"; context.fillRect(0, 0, canvas.width, canvas.height); context.drawImage(image, 0, 0, 2400, 3000);
-    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob((value) => value ? resolve(value) : reject(new Error("PNG encoding failed.")), "image/png"));
-    const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-  } finally { URL.revokeObjectURL(url); }
+export function printReport(format: PrintFormat) { const style=document.createElement("style");style.textContent=`@page{size:${format==="8x10"?"8in 10in":"letter portrait"};margin:.22in}`;document.head.appendChild(style);const cleanup=()=>style.remove();window.addEventListener("afterprint",cleanup,{once:true});window.print(); }
+type FlyerData={mode:"price"|"downPayment";results:BuyingPowerScenarioResult[];shared:BuyingPowerSharedAssumptions;disclosure:DisclosureConfig;inclusions:PaymentInclusions;rateAsOf:string;status:ReportStatus};
+const usd=(n:number)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
+const pct=(n:number)=>`${Number(n.toFixed(3))}%`;
+function text(ctx:CanvasRenderingContext2D,value:string,x:number,y:number,font:string,color:string){ctx.font=font;ctx.fillStyle=color;ctx.fillText(value,x,y)}
+function wrap(ctx:CanvasRenderingContext2D,value:string,x:number,y:number,width:number,lineHeight:number){let line="";for(const word of value.split(" ")){const candidate=line?`${line} ${word}`:word;if(line&&ctx.measureText(candidate).width>width){ctx.fillText(line,x,y);y+=lineHeight;line=word}else line=candidate}ctx.fillText(line,x,y)}
+export async function exportFlyerPng(data:FlyerData,filename:string){
+ const canvas=document.createElement("canvas");canvas.width=2400;canvas.height=3000;const c=canvas.getContext("2d");if(!c)throw new Error("Canvas rendering unavailable");const ink="#18302b",forest="#173f3a",cream="#f4efe5",copper="#c97b45",muted="#5f6e69";c.fillStyle="#fff";c.fillRect(0,0,2400,3000);c.fillStyle=ink;c.fillRect(0,0,2400,560);
+ text(c,data.disclosure.companyName||"Artemis Mortgage",140,115,"700 52px Arial","#fff");text(c,"HOME BUYING POWER COMPARISON",140,162,"26px Arial","#cbd7d2");c.textAlign="right";text(c,`${data.status==="draft"?"DRAFT · ":""}Prepared ${new Date().toLocaleDateString()}`,2260,115,"26px Arial","#cbd7d2");c.textAlign="left";text(c,data.mode==="price"?"PURCHASE PRICE COMPARISON":"DOWN PAYMENT COMPARISON",140,290,"700 27px Arial","#ddb58f");text(c,"Monthly payment and upfront cost",140,385,"64px Georgia","#fff");text(c,"estimates, side by side.",140,465,"64px Georgia","#fff");text(c,data.rateAsOf?`Rates shown as of ${new Date(data.rateAsOf).toLocaleString()}`:"Rate timestamp required",140,525,"26px Arial","#cbd7d2");
+ const gap=28,w=(2120-gap*2)/3,top=610,h=1050;data.results.forEach((r,i)=>{const x=140+i*(w+gap);c.fillStyle=i===1?cream:"#f8faf9";c.beginPath();c.roundRect(x,top,w,h,18);c.fill();c.strokeStyle=i===1?copper:"#d5ded9";c.lineWidth=i===1?7:3;c.stroke();text(c,r.name,x+35,top+65,"700 27px Arial",forest);text(c,data.mode==="price"?usd(r.purchasePrice):`${pct(r.downPaymentPercent)} down`,x+35,top+140,"50px Georgia",ink);text(c,"ESTIMATED TOTAL MONTHLY PAYMENT",x+35,top+215,"700 20px Arial",muted);text(c,`${usd(r.totalMonthlyHousingPayment)}/mo`,x+35,top+305,"66px Georgia",copper);text(c,`P&I ${usd(r.monthlyPrincipalAndInterest)}/mo`,x+35,top+365,"700 25px Arial",ink);text(c,`for ${data.shared.termYears*12} months`,x+35,top+405,"24px Arial",ink);text(c,`${pct(r.interestRate)} fixed | ${r.apr?pct(r.apr):"APR required"} APR`,x+35,top+460,"23px Arial",ink);text(c,`${pct(r.downPaymentPercent)} down`,x+35,top+500,"23px Arial",ink);text(c,"ESTIMATED CASH TO CLOSE",x+35,top+585,"700 20px Arial",muted);text(c,usd(r.cashToClose),x+35,top+650,"46px Georgia",ink);let y=top+730;const rows=[["Taxes",r.monthlyTaxes,data.inclusions.propertyTaxes],["Insurance",r.monthlyInsurance,data.inclusions.homeownersInsurance],["MI",r.monthlyMortgageInsurance,data.inclusions.mortgageInsurance],["HOA",r.monthlyHoa,data.inclusions.hoa]] as const;for(const row of rows)if(row[2]){text(c,row[0],x+35,y,"22px Arial",muted);c.textAlign="right";text(c,`${usd(row[1])}/mo`,x+w-35,y,"22px Arial",ink);c.textAlign="left";y+=40}if(!data.inclusions.propertyTaxes||!data.inclusions.homeownersInsurance){c.font="700 19px Arial";c.fillStyle="#982f20";wrap(c,"Taxes and/or insurance are not included. Actual payment will be higher.",x+35,top+965,w-70,25)}});
+ c.fillStyle=cream;c.fillRect(0,1710,2400,500);text(c,`Estimated payment at each ${data.mode==="price"?"price":"down payment"}`,140,1790,"44px Georgia",ink);const max=Math.max(...data.results.map(r=>r.totalMonthlyHousingPayment),1);data.results.forEach((r,i)=>{const y=1870+i*82;text(c,r.name,140,y,"700 23px Arial",ink);c.fillStyle="#dbe3df";c.fillRect(425,y-25,1240,32);c.fillStyle=[forest,copper,"#789089"][i];c.fillRect(425,y-25,1240*r.totalMonthlyHousingPayment/max,32);text(c,`${usd(r.totalMonthlyHousingPayment)}/mo`,1710,y,"29px Georgia",ink)});text(c,"COMPARED WITH SCENARIO A",140,2140,"700 23px Arial",ink);data.results.slice(1).forEach((r,i)=>text(c,`${r.name}: ${usd(r.totalMonthlyHousingPayment-data.results[0].totalMonthlyHousingPayment)}/mo · ${usd(r.cashToClose-data.results[0].cashToClose)} cash · ${usd(r.totalLoanAmount-data.results[0].totalLoanAmount)} loan`,500,2140+i*34,"21px Arial",ink));
+ c.fillStyle=ink;c.fillRect(0,2210,2400,790);text(c,"ILLUSTRATIVE MORTGAGE EXAMPLES ONLY.",140,2290,"700 25px Arial","#fff");c.font="24px Arial";c.fillStyle="#d7dfdc";wrap(c,`Rates and terms shown as of ${data.rateAsOf?new Date(data.rateAsOf).toLocaleString():"not entered"} and are not locked. Interest rates, APRs, payments and costs may change based on borrower qualification, property, program, lender requirements, and market conditions. Taxes and insurance may change. Cash to close is an estimate and may change. This is not a commitment to lend or guarantee of approval.`,140,2350,2120,36);text(c,`${data.disclosure.loanOfficerName} | ${data.disclosure.loanOfficerTitle} | NMLS #${data.disclosure.loanOfficerNmlsId}`,140,2740,"700 25px Arial","#fff");const company=`${data.disclosure.companyName}${data.disclosure.companyLicenseType&&data.disclosure.companyStateLicenseNumber?` | ${data.disclosure.companyLicenseType} #${data.disclosure.companyStateLicenseNumber}`:""}${data.disclosure.companyNmlsId?` | NMLS #${data.disclosure.companyNmlsId}`:""}`;text(c,company,140,2790,"700 25px Arial","#fff");
+ const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(v=>v?resolve(v):reject(new Error("PNG encoding failed")),"image/png"));const link=document.createElement("a");link.href=URL.createObjectURL(blob);link.download=filename;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000);
 }
