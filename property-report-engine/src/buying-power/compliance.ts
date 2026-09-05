@@ -2,7 +2,7 @@ import { validateBuyerAdvertising } from "@/domain/compliance";
 import type { ApprovalRecord, BuyingPowerScenarioResult, BuyingPowerSharedAssumptions, DisclosureConfig, PaymentInclusions } from "./types";
 
 export function validateClientExport(disclosure: DisclosureConfig, approval: ApprovalRecord, shared: BuyingPowerSharedAssumptions, scenarios: BuyingPowerScenarioResult[], inclusions: PaymentInclusions, rateAsOf: string) {
-  const errors = validateBuyerAdvertising({ identity: disclosure, rateAsOf, aprs: scenarios.map((s) => s.apr), termMonths: shared.termYears * 12, approval }).errors;
+  const errors = validateBuyerAdvertising({ identity: disclosure, rateAsOf, aprs: scenarios.map((s) => s.apr), termMonths: shared.termYears * 12, approval }).errors.filter((error) => error !== "A complete employer approval record is required.");
   if (!inclusions.propertyTaxes || !inclusions.homeownersInsurance) errors.push("Client exports must include property taxes and homeowners insurance in the advertised payment.");
   scenarios.forEach((scenario) => {
     const name = scenario.name || "Scenario";

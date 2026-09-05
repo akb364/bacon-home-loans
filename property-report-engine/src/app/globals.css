@@ -22,3 +22,15 @@
 .bp-terms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 34px 18px}.bp-terms-grid>div{display:flex;flex-direction:column;gap:4px;padding:13px 14px;border:1px solid #d9dedb;border-radius:10px;background:#f8faf9;font-size:.72rem}.bp-terms-grid strong{font-size:.82rem;color:#173c34}.bp-terms-grid small{line-height:1.45;color:#40544f}.bp-terms-grid em{font-style:normal;font-weight:800;color:#9a3e29;line-height:1.35}
 @media(max-width:800px){.bp-terms-grid{grid-template-columns:1fr;margin-inline:18px}}
 @media print{.bp-terms-grid{margin:0 22px 10px;gap:7px}.bp-terms-grid>div{padding:8px 9px;font-size:7pt}.bp-terms-grid strong{font-size:7.5pt}}
+
+/* Buyer flyer: native 8x10 is the primary format. A temporary style injected by
+   printReport selects Letter only for the secondary export. */
+@media print{
+  @page{size:8in 10in;margin:.22in}
+  .bp-report-wrap{padding:0}.bp-report{width:100%;height:auto;box-shadow:none;overflow:hidden}
+  .bp-report-hero{padding:14px 22px 18px}.bp-report-hero>div:last-child{margin-top:16px}.bp-report-hero h1{font-size:25px;margin:5px 0}.bp-report-hero h2{font-size:10px}
+  .bp-cards{padding:0 22px 12px;gap:7px}.bp-card{padding:11px}.bp-card h3{font-size:18px;margin:4px 0 8px}.bp-big-metric strong{font-size:23px}.bp-big-metric b,.bp-big-metric small{display:block;font-size:8.5pt;line-height:1.3}.bp-big-metric em{display:block;font-size:8.5pt;line-height:1.25;color:#8b2f20;font-weight:800;font-style:normal;margin-top:3px}.bp-cash{margin-top:7px;padding-top:7px}.bp-cash strong{font-size:17px}
+  .bp-visuals{padding:12px 22px;grid-template-columns:1.25fr .75fr;gap:18px}.bp-visuals h2{font-size:15px;margin:3px 0 8px}.bp-bar-row{margin:6px 0}.bp-compact-differences p{margin:7px 0;font-size:8.5pt}.bp-compact-differences span{display:block;color:var(--muted)}
+  .bp-report>.bp-report-section{display:none!important}.bp-report .disclosure{display:block;padding:12px 22px;font-size:8.5pt;line-height:1.35;break-inside:avoid}.bp-report .disclosure p{margin:5px 0}.bp-report .disclosure>div{padding-top:7px;margin-top:7px;gap:6px;flex-wrap:wrap;font-size:9pt}
+}
+.png-render{width:768px!important;height:960px!important;overflow:hidden!important;background:#fff}.png-render .bp-report-hero{padding:14px 22px 18px!important}.png-render .bp-report-hero>div:last-child{margin-top:16px!important}.png-render .bp-report-hero h1{font-size:25px!important}.png-render .bp-cards{padding:0 22px 12px!important;gap:7px!important}.png-render .bp-card{padding:11px!important}.png-render .bp-report-section{display:none!important}.png-render .bp-visuals{padding:12px 22px!important;grid-template-columns:1.25fr .75fr!important}.png-render .disclosure{padding:12px 22px!important;font-size:11px!important;line-height:1.35!important}.bp-compact-differences p{display:flex;flex-direction:column;gap:2px}
